@@ -59,7 +59,7 @@ def __getContentFromPost(submission) -> VideoScript:
 
     failedAttempts = 0
     for comment in submission.comments:
-        if(content.addCommentFrame(markdown_to_text.markdown_to_text(comment.body), comment.id)):
+        if(content.addCommentScene(markdown_to_text.markdown_to_text(comment.body), comment.id)):
             failedAttempts += 1
         if (content.canQuickFinish() or (failedAttempts > 2 and content.canBeFinished())):
             break
