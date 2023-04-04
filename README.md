@@ -7,7 +7,7 @@
 ---
 This program generates a .mp4 video automatically by querying the top post on the
 r/askreddit subreddit, and grabbing several comments. To use this program:
-- [ ] Install dependencies ```pip install bs4 markdown markdown_to_text moviepy praw pyttsx3 selenium videoscript```
+- [ ] Install dependencies ```pip install bs4 markdown markdown_to_text moviepy praw pyttsx3 selenium ```
 - [ ] Register with Reddit to create and API application [here](https://www.reddit.com/prefs/apps/)
 - [ ] Use the credentials from the previous step to update reddit.py line 46-51
 - [ ] Make a copy of config.example.ini and rename to config.ini
