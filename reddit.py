@@ -1,17 +1,30 @@
-import os, re, praw, markdown_to_text, time
+import os
+import re
+import praw
+import markdown_to_text
+import time
 from videoscript import VideoScript
 
-redditUrl = "https://www.reddit.com/"
+# Configuration variables
+CLIENT_ID = "YOUR_CLIENT_ID_HERE"
+CLIENT_SECRET = "YOUR_CLIENT_SECRET_HERE"
+USER_AGENT = "YOUR_USER_AGENT_HERE" 
+# user_agent sounds scary, but it's just a string to identify what your using it for
+# It's common courtesy to use something like <platform>:<name>:<version> by <your name>
+# ex. "Window11:TestApp:v0.1 by u/Shifty-The-Dev"
+SUBREDDIT = "askreddit"
+
+REDDIT_URL = "https://www.reddit.com/"
 
 def getContent(outputDir, postOptionCount) -> VideoScript:
     reddit = __getReddit()
     existingPostIds = __getExistingPostIds(outputDir)
 
-    now = int( time.time() )
+    now = int(time.time())
     autoSelect = postOptionCount == 0
     posts = []
 
-    for submission in reddit.subreddit("askreddit").top(time_filter="day", limit=postOptionCount*3):
+    for submission in reddit.subreddit(SUBREDDIT).top(time_filter="day", limit=postOptionCount*3):
         if (f"{submission.id}.mp4" in existingPostIds or submission.over_18):
             continue
         hoursAgoPosted = (now - submission.created_utc) / 3600
@@ -23,7 +36,7 @@ def getContent(outputDir, postOptionCount) -> VideoScript:
     if (autoSelect):
         return __getContentFromPost(posts[0])
     else:
-        postSelection = int(input("Input :"))
+        postSelection = int(input("Input: "))
         selectedPost = posts[postSelection]
         return __getContentFromPost(selectedPost)
 
@@ -43,12 +56,9 @@ def getContentFromId(outputDir, submissionId) -> VideoScript:
 
 def __getReddit():
     return praw.Reddit(
-        client_id="YOUR_CLIENT_ID_HERE",
-        client_secret="YOUR_CLIENT_SECRET_HERE",
-        # user_agent sounds scary, but it's just a string to identify what your using it for
-        # It's common courtesy to use something like <platform>:<name>:<version> by <your name>
-        # ex. "Window11:TestApp:v0.1 by u/Shifty-The-Dev"
-        user_agent="YOUR_USER_AGENT_HERE"
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        user_agent=USER_AGENT
     )
 
 
@@ -67,7 +77,7 @@ def __getContentFromPost(submission) -> VideoScript:
 
 def __getExistingPostIds(outputDir):
     files = os.listdir(outputDir)
-    # I'm sure anyone knowledgable on python hates this. I had some weird 
+    # I'm sure anyone knowledgeable on python hates this. I had some weird 
     # issues and frankly didn't care to troubleshoot. It works though...
     files = [f for f in files if os.path.isfile(outputDir+'/'+f)]
     return [re.sub(r'.*?-', '', file) for file in files]
