@@ -4,17 +4,14 @@ import praw
 import markdown_to_text
 import time
 from videoscript import VideoScript
+import configparser
 
-# Configuration variables
-CLIENT_ID = "YOUR_CLIENT_ID_HERE"
-CLIENT_SECRET = "YOUR_CLIENT_SECRET_HERE"
-USER_AGENT = "YOUR_USER_AGENT_HERE" 
-# user_agent sounds scary, but it's just a string to identify what your using it for
-# It's common courtesy to use something like <platform>:<name>:<version> by <your name>
-# ex. "Window11:TestApp:v0.1 by u/Shifty-The-Dev"
-SUBREDDIT = "askreddit"
-
-REDDIT_URL = "https://www.reddit.com/"
+config = configparser.ConfigParser()
+config.read('config.ini')
+CLIENT_ID = config["Reddit"]["CLIENT_ID"]
+CLIENT_SECRET = config["Reddit"]["CLIENT_SECRET"]
+USER_AGENT = config["Reddit"]["USER_AGENT"]
+SUBREDDIT = config["Reddit"]["SUBREDDIT"]
 
 def getContent(outputDir, postOptionCount) -> VideoScript:
     reddit = __getReddit()
